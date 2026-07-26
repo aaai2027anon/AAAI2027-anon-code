@@ -1,12 +1,12 @@
 
 
-dataset: 'ICPARK'
+dataset: 'ICPARK-StructRecon'
 
 
 mapping:
   extras_render_device: "cuda:1"
   export_blocks_instead_of_mesh: true
-  presegmented_blocks_dir: output/ICPARK_StructRecon/preoptimized_blocks
+  presegmented_blocks_dir: output/ICPARK-StructRecon/preoptimized_blocks
   bound: [[37.9265, 293.2444], [-3.5017, 262.6937], [-0.2400, 3.0000]]
   marching_cubes_bound: [[37.9265, 293.2444], [-3.5017, 262.6937], [-0.2400, 3.0000]]
   load_decoder_warmup: True
@@ -34,10 +34,10 @@ mapping:
       w_color_scale: 1.0
   dual_weight_arbitration:
     enable: true
-    prior_weight_gamma: 1.0
-    dynamic_occlusion_threshold: 0.5
-    confidence_threshold_std: 0.1
-    data_weight_epsilon: 0.1
+    prior_weight_gamma: 10.0
+    dynamic_occlusion_threshold: 0.15
+    confidence_threshold_std: 0.05
+    data_weight_epsilon: 0.01
 
 cam:
   H: 720
@@ -49,8 +49,8 @@ cam:
   png_depth_scale: 1000.0
 
 data:
-  input_folder: "Datasets/ICPARK"
-  output: "output/ICPARK_StructRecon"
+  input_folder: "Datasets/ICPARK-StructRecon"
+  output: "output/ICPARK-StructRecon"
 
 
 enable_prior_structural_constraints: true

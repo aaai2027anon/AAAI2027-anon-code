@@ -117,7 +117,8 @@ class Mapper(object):
                                      
         self.enable_adaptive_prior_loss = bool(mapping_cfg.get('enable_adaptive_prior_loss', True))
         self.prior_loss_lambda_max = _to_float(mapping_cfg.get('prior_loss_lambda_max', 1.0), 1.0)
-        self.prior_loss_gamma = _to_float(mapping_cfg.get('prior_loss_gamma', 1.0), 1.0)
+        self.prior_loss_gamma = _to_float(mapping_cfg.get('prior_loss_gamma', 10.0), 10.0)
+        self.prior_warmup_steps = max(1, _to_int(mapping_cfg.get('prior_warmup_steps', 500), 500))
         self.prior_loss_tau_w = _to_float(mapping_cfg.get('prior_loss_tau_w', 1.0), 1.0)
         self.prior_loss_delta = _to_float(mapping_cfg.get('prior_loss_delta', 0.1), 0.1)
         self.prior_loss_w_normal = _to_float(mapping_cfg.get('prior_loss_w_normal', 0.1), 0.1)
@@ -127,16 +128,17 @@ class Mapper(object):
             print("[Mapper] Structure-adaptive prior loss enabled:")
             print(f"  - lambda_max: {self.prior_loss_lambda_max}")
             print(f"  - gamma: {self.prior_loss_gamma}")
+            print(f"  - warmup_steps: {self.prior_warmup_steps}")
             print(f"  - tau_w: {self.prior_loss_tau_w}")
             print(f"  - huber_delta: {self.prior_loss_delta}")
             print(f"  - normal_weight: {self.prior_loss_w_normal}")
 
         dual_cfg = mapping_cfg.get('dual_weight_arbitration', {})
         self.enable_dual_weight_arbitration = bool(dual_cfg.get('enable', False))
-        self.prior_weight_gamma = _to_float(dual_cfg.get('prior_weight_gamma', 1.0), 1.0)
-        self.dynamic_occlusion_threshold = _to_float(dual_cfg.get('dynamic_occlusion_threshold', 0.5), 0.5)
-        self.confidence_threshold_std = _to_float(dual_cfg.get('confidence_threshold_std', 0.1), 0.1)
-        self.data_weight_epsilon = _to_float(dual_cfg.get('data_weight_epsilon', 0.1), 0.1)
+        self.prior_weight_gamma = _to_float(dual_cfg.get('prior_weight_gamma', 10.0), 10.0)
+        self.dynamic_occlusion_threshold = _to_float(dual_cfg.get('dynamic_occlusion_threshold', 0.15), 0.15)
+        self.confidence_threshold_std = _to_float(dual_cfg.get('confidence_threshold_std', 0.05), 0.05)
+        self.data_weight_epsilon = _to_float(dual_cfg.get('data_weight_epsilon', 0.01), 0.01)
 
         if self.enable_dual_weight_arbitration:
             print("[Mapper] Bidirectional arbitration enabled:")
@@ -721,7 +723,7 @@ class Mapper(object):
         return sdf_losses
 
     def compute_adaptive_prior_loss(self, render_result, gt_depth, rays_o, rays_d, decoders, all_planes,
-                                    Phi_prior=None, voxel_size=None, origin_xyz=None):
+                                    Phi_prior=None, voxel_size=None, origin_xyz=None, prior_gamma=None):
         if not self.enable_adaptive_prior_loss or Phi_prior is None:
             zero = torch.tensor(0.0, device=self.device)
             return zero, zero
@@ -737,7 +739,8 @@ class Mapper(object):
             w_obs = torch.ones_like(pred_depth)
         else:
             depth_residual = torch.abs(pred_depth - gt_depth)
-            w_obs = torch.exp(-self.prior_loss_gamma * depth_residual)
+            gamma = self.prior_loss_gamma if prior_gamma is None else float(prior_gamma)
+            w_obs = torch.exp(-gamma * depth_residual)
             valid_depth = (gt_depth > 0)
             w_obs = w_obs * valid_depth.float()
 
@@ -1273,13 +1276,17 @@ class Mapper(object):
                                                    
                 if self.enable_adaptive_prior_loss and hasattr(self, 'Phi_prior') and self.Phi_prior is not None:
                                
+                    warmup_ratio = min(
+                        1.0, (self._loss_global_step + 1) / float(self.prior_warmup_steps)
+                    )
+                    current_prior_gamma = self.prior_loss_gamma * warmup_ratio
                     prior_loss, normal_loss = self.compute_adaptive_prior_loss(
                         render_dict, target_d, rays_o, rays_d, self.decoders, all_planes,
-                        self.Phi_prior, self.voxel_size, self.origin_xyz
+                        self.Phi_prior, self.voxel_size, self.origin_xyz,
+                        prior_gamma=current_prior_gamma
                     )
 
-                            
-                    current_lambda_prior = self.prior_loss_lambda_max * min(1.0, (idx + 1) / 10.0)         
+                    current_lambda_prior = self.prior_loss_lambda_max * warmup_ratio
                     total_prior_loss = current_lambda_prior * (prior_loss + self.prior_loss_w_normal * normal_loss)
                     loss = loss + total_prior_loss
 

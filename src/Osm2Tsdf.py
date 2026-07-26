@@ -37,9 +37,9 @@ except ImportError:
 
                                         
                              
-OSM_PATH                  = "Datasets/ICPARKOSM/ICPARK.osm"
+OSM_PATH                  = "Datasets/ICPARK-StructRecon-OSM/ICPARK-StructRecon.osm"
 OSM_STYPE_TAG_KEY: str    = "sType"
-OUTPUT_DIR: str           = "output/ICPARKOSM_generated/"            
+OUTPUT_DIR: str           = "output/ICPARK-StructRecon-OSM_generated/"            
 
 VOXEL                     = 0.06            
 TRUNC                     = 0.06            

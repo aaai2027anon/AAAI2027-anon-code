@@ -27,9 +27,9 @@ python visualizer.py --help
 ```
 
 ## Data layout
-This anonymous release only supports `ICPARK` (`dataset: "ICPARK"` in config).
+This anonymous release only supports `ICPARK-StructRecon` (`dataset: "ICPARK-StructRecon"` in config).
 
-ICPARK:
+ICPARK-StructRecon:
 ```text
 <input_folder>/
   color/
@@ -55,8 +55,8 @@ At minimum, verify:
 ### Tracking / odometry regularization
 Tracking supports an optional odometry residual term in pose optimization.
 
-- Default is disabled: `tracking.use_odom: false`
-- Enable it by setting: `tracking.use_odom: true`
+- Default is enabled: `tracking.use_odom: true`
+- Disable it for the matched no-pose-refinement control by setting: `tracking.use_odom: false`
 - Main knobs:
   - `tracking.w_odom`
   - `tracking.odom_trans_weight`

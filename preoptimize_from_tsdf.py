@@ -40,7 +40,7 @@ def load_config(config_path):
         cfg['model'] = {}
 
     defaults = {
-        'prior_tsdf_path': 'output/ICPARKOSM_generated/Dparking_prior_tsdf.npy',
+        'prior_tsdf_path': 'output/ICPARK-StructRecon-OSM_generated/Dparking_prior_tsdf.npy',
         'prior_tsdf_origin_xyz': [37.92651181, -3.50169141, -0.24],
         'prior_tsdf_voxel_size': 0.06,
         'truncation': 0.06,
@@ -51,8 +51,8 @@ def load_config(config_path):
         'prior_init_lr_planes': 0.008,
         'prior_init_samples_per_batch': 32768,
         'use_importance_sampling': True,
-        'importance_tau_s': 1.0,
-        'importance_epsilon': 1e-3,
+        'importance_tau_s': 1.5,
+        'importance_epsilon': 2e-3,
         'importance_eta': 0.5,
     }
 
@@ -252,7 +252,7 @@ def is_point_in_tsdf_bounds(point, coords):
             z_coords[0] <= z <= z_coords[-1])
 
 
-def compute_importance_weights(points, interpolator, coords, voxel_size, tau_s=1.0, epsilon=1e-3, eta=0.5):
+def compute_importance_weights(points, interpolator, coords, voxel_size, tau_s=1.5, epsilon=2e-3, eta=0.5):
     weights = []
     for point in points:
         if is_point_in_tsdf_bounds(point.cpu().numpy(), coords):
@@ -282,8 +282,8 @@ def sample_points(bound, num_samples, coords, device, use_importance_sampling=Tr
 
     interpolator = importance_sampling_params['interpolator']
     voxel_size = importance_sampling_params['voxel_size']
-    tau_s = importance_sampling_params.get('tau_s', 1.0)
-    epsilon = importance_sampling_params.get('epsilon', 1e-3)
+    tau_s = importance_sampling_params.get('tau_s', 1.5)
+    epsilon = importance_sampling_params.get('epsilon', 2e-3)
     eta = importance_sampling_params.get('eta', 0.5)
 
     candidate_multiplier = 10
@@ -326,7 +326,7 @@ def huber_loss(x, delta):
 
 
 def train_iteration(decoder, planes, bound, interpolator, coords, optimizer, num_samples, device,
-                    truncation, voxel_size, use_importance_sampling=True, tau_s=1.0, epsilon=1e-3, eta=0.5):
+                    truncation, voxel_size, use_importance_sampling=True, tau_s=1.5, epsilon=2e-3, eta=0.5):
     if use_importance_sampling:
         importance_params = {
             'interpolator': interpolator,
@@ -373,8 +373,8 @@ def optimize(cfg, decoder, planes, bound, interpolator, coords, device, args):
     truncation = cfg['model'].get('truncation', 0.06)
 
     use_importance_sampling = cfg['model'].get('use_importance_sampling', True)
-    tau_s = cfg['model'].get('importance_tau_s', 1.0)
-    epsilon = cfg['model'].get('importance_epsilon', 1e-3)
+    tau_s = cfg['model'].get('importance_tau_s', 1.5)
+    epsilon = cfg['model'].get('importance_epsilon', 2e-3)
     eta = cfg['model'].get('importance_eta', 0.5)
     voxel_size = cfg['model'].get('prior_tsdf_voxel_size', 0.06)
 

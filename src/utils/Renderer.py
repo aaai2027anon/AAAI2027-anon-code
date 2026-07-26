@@ -27,8 +27,8 @@ class Renderer(object):
                             
         mapping_cfg = cfg.get('mapping', {})
         self.enable_pgis = bool(mapping_cfg.get('enable_pgis', True))            
-        self.pgis_tau_s = float(mapping_cfg.get('pgis_tau_s', 1.0))              
-        self.pgis_epsilon = float(mapping_cfg.get('pgis_epsilon', 0.001))          
+        self.pgis_tau_s = float(mapping_cfg.get('pgis_tau_s', 1.5))              
+        self.pgis_epsilon = float(mapping_cfg.get('pgis_epsilon', 0.002))          
         self.pgis_eta = float(mapping_cfg.get('pgis_eta', 0.5))                
         self.pgis_n_stratified = int(mapping_cfg.get('pgis_n_stratified', 64))              
         self.pgis_n_prior = int(mapping_cfg.get('pgis_n_prior', 64))                  

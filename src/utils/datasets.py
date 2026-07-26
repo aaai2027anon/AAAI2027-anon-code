@@ -328,9 +328,9 @@ class TUM_RGBD(BaseDataset):
         return pose
 
 
-class ICPARK(BaseDataset):
+class ICPARKStructRecon(BaseDataset):
     def __init__(self, cfg, args, scale, device='cuda:0'):
-        super(ICPARK, self).__init__(cfg, args, scale, device)
+        super(ICPARKStructRecon, self).__init__(cfg, args, scale, device)
                                        
         self.color_paths = sorted(glob.glob(os.path.join(
             self.input_folder, 'color', '*.jpg')), key=lambda x: int(os.path.basename(x)[:-4])) or sorted(
@@ -387,7 +387,7 @@ class ICPARK(BaseDataset):
                 f.write("0.0 0.0 0.0 1.0\n")
 
         self.n_img = min(len(self.color_paths), len(self.depth_paths))
-        print(f"ICPARK dataset: loaded{self.n_img}Frame RGBD data")
+        print(f"ICPARK-StructRecon dataset: loaded{self.n_img}Frame RGBD data")
         print(
             f"Number of image files:{len(self.color_paths)}, number of depth files:{len(self.depth_paths)}, number of pose files:{len(self.poses)}")
 
@@ -541,7 +541,7 @@ class ICPARK(BaseDataset):
         pose = coord_transform @ pose @ torch.inverse(coord_transform)
         
         if index == 0 or index == 1:
-            print(f"ICPARK dataset: frames{index}Y/Z coordinate system transformation is applied (Y front Z front, Z up Y down)")
+            print(f"ICPARK-StructRecon dataset: frames{index}Y/Z coordinate system transformation is applied (Y front Z front, Z up Y down)")
                                                   
 
                                                
@@ -552,7 +552,7 @@ class ICPARK(BaseDataset):
             if index == 0:
                 pose = self.first_frame_abs_pose.clone()
                 if index == 0:
-                    print(f"ICPARK dataset: frames{index}first_frame_abs_pose pose transformation applied")
+                    print(f"ICPARK-StructRecon dataset: frames{index}first_frame_abs_pose pose transformation applied")
             else:
                                 
                             
@@ -565,7 +565,7 @@ class ICPARK(BaseDataset):
                 pose = transformed_pose
 
                 if index == 1:
-                    print(f"ICPARK dataset: frames{index}Relative pose transformation applied")
+                    print(f"ICPARK-StructRecon dataset: frames{index}Relative pose transformation applied")
 
         return index, color_data, depth_data, pose
 
@@ -574,5 +574,5 @@ dataset_dict = {
     "replica": Replica,
     "scannet": ScanNet,
     "tumrgbd": TUM_RGBD,
-    "ICPARK": ICPARK
+    "ICPARK-StructRecon": ICPARKStructRecon
 }

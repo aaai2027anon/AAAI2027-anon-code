@@ -1,4 +1,4 @@
-# StructRecon Dataset
+# ICPARK-StructRecon Dataset
 
 > A Multi-Modal Parking Lot Dataset for Structured Reconstruction
 
@@ -11,7 +11,7 @@ Due to anonymous review requirements, we are unable to upload the full raw datas
 The StructRecon dataset is a multi-modal sequence collected in a real-world underground parking lot, used to support the training and evaluation of the structured reconstruction method presented in the paper.
 
 - **Duration:** ~4,593 s (~76.6 min)
-- **RGB/Depth Frames:** 137,723 frames @ 30 Hz, resolution 1280 × 720
+- **RGB/Depth Frames:** 137,724 frames @ 30 Hz, resolution 1280 × 720
 - **LiDAR Frames:** 45,950 frames @ 10 Hz
 - **Coordinate System:** ROS/KITTI right-handed (X-forward, Y-left, Z-up)
 
@@ -45,15 +45,15 @@ dataset/
 ### 1. RGB Images (`image/`)
 
 - Format: PNG (RGBA, alpha channel always 255 — treat as RGB)
-- Naming: `left000001.png` – `left137723.png` (1-indexed)
+- Naming: `left000001.png` – `left137724.png` (1-indexed)
 - Resolution: 1280 × 720, ~30 Hz
 - Sensor: ZED stereo camera (left eye)
 
 ### 2. Depth-Related Images (`depth/`)
 
 - Format: PNG (RGBA, 1280×720×4, uint8)
-- Naming: `depth000001.png` – `depth137723.png` (1-indexed)
-- Count: 137,723 frames, ~30 Hz
+- Naming: `depth000001.png` – `depth137724.png` (1-indexed)
+- Count: 137,724 frames, ~30 Hz
 - Note: When read normally, appears as RGBA with identical values in the first three channels. Physical depth interpretation requires calibration files — do not assume standard 16-bit depth encoding.
 
 ### 3. LiDAR Point Clouds (`velodyne/`)

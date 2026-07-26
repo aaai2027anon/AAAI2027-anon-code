@@ -89,13 +89,13 @@ class BlockManager:
 
                                      
                      
-        block_size_xy_cfg = self.cfg['model'].get('block_size', 7.68)
+        block_size_xy_cfg = self.cfg['model'].get('block_size', 8.0)
                                                       
         if isinstance(block_size_xy_cfg, (list, tuple, np.ndarray)):
-            self.block_size_xy = float(block_size_xy_cfg[0]) if len(block_size_xy_cfg) > 0 else 7.68
+            self.block_size_xy = float(block_size_xy_cfg[0]) if len(block_size_xy_cfg) > 0 else 8.0
         elif isinstance(block_size_xy_cfg, torch.Tensor):
             flat = block_size_xy_cfg.flatten()
-            self.block_size_xy = float(flat[0].item()) if flat.numel() > 0 else 7.68
+            self.block_size_xy = float(flat[0].item()) if flat.numel() > 0 else 8.0
         else:
             self.block_size_xy = float(block_size_xy_cfg)
                                  
