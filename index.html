@@ -22,9 +22,9 @@
       <p class="subtitle">The same depth residual can mean a biased structural prior or a corrupted observation—and these two causes require opposite corrective actions. StructRecon routes the conflict before weighting it.</p>
       <p class="authors">Anonymous Submission</p>
       <div class="btn-row">
-        <a class="btn primary" href="StructRecon_Paper.pdf">Paper PDF</a>
-        <a class="btn" href="StructRecon_Supplementary.pdf">Supplement</a>
-        <span class="btn disabled" aria-disabled="true" title="Code and data will be released upon publication.">Code and Data (upon publication)</span>
+        <a class="btn primary" href="#demo">Demo Video</a>
+        <a class="btn" href="https://github.com/aaai2027anon/AAAI2027-anon-code">Code</a>
+        <a class="btn" href="https://github.com/aaai2027anon/AAAI2027-anon-code/tree/main/Datasets">Data</a>
         <a class="btn" href="#results">Main Evidence</a>
       </div>
     </div>
@@ -46,7 +46,8 @@
       <p class="eyebrow">Video Demo</p>
       <h2>ICPARK-Full uninterrupted online mapping</h2>
       <p class="lead">StructRecon jointly refines camera trajectory and dense scene geometry over the complete 137,724-frame, 2.70-km route. The presentation video is accelerated; measured online throughput is 14.5 FPS with 5.0 GB peak GPU memory on GTX1660-class hardware.</p>
-      <div class="video-shell"><video controls playsinline preload="none" width="1440" height="1080" aria-label="StructRecon ICPARK-Full online mapping demo"><source src="assets/StructRecon_Demo_Video.mp4" type="video/mp4">Your browser does not support embedded MP4 video.</video><p class="caption">H.264, 1440×1080 (4:3). The initial player reserves the source video's exact aspect ratio before playback, while <code>preload="none"</code> avoids downloading the video body on first load.</p></div>
+      <div class="video-shell"><video id="demo-video" controls playsinline preload="none" width="1440" height="1080" defaultPlaybackRate="0.9" aria-label="StructRecon ICPARK-Full online mapping demo"><source src="assets/StructRecon_Demo_Video.mp4" type="video/mp4">Your browser does not support embedded MP4 video.</video><p class="caption">H.264, 1440×1080 (4:3). Playback defaults to 0.9× speed. The initial player reserves the source video's exact aspect ratio before playback, while <code>preload="none"</code> avoids downloading the video body on first load.</p></div>
+<script>document.getElementById('demo-video').addEventListener('play',function(){this.playbackRate=0.9})</script>
     </div></section>
 
     <section id="abstract"><div class="container">
@@ -197,7 +198,7 @@
       </div>
     </div></section>
 
-    <section id="citation"><div class="container"><p class="eyebrow">Resources</p><h2>Paper, supplement and citation</h2><p class="lead">The paper and supplementary material are packaged inside this deployable Web root. Code and data links will be activated upon publication.</p><div class="btn-row" style="margin-bottom:24px"><a class="btn primary" href="StructRecon_Paper.pdf" style="color:#fff">Paper PDF</a><a class="btn" href="StructRecon_Supplementary.pdf" style="color:var(--deep);border-color:var(--line)">Supplement</a></div><div class="bibtex">@inproceedings{anonymous2027structrecon,
+    <section id="citation"><div class="container"><p class="eyebrow">Resources</p><h2>Citation</h2><p class="lead">The paper and supplementary material are under double-blind review. Code and data are publicly available.</p><div class="btn-row" style="margin-bottom:24px"><a class="btn" href="https://github.com/aaai2027anon/AAAI2027-anon-code" style="color:var(--deep);border-color:var(--line)">Code</a><a class="btn" href="https://github.com/aaai2027anon/AAAI2027-anon-code/tree/main/Datasets" style="color:var(--deep);border-color:var(--line)">Data</a></div><div class="bibtex">@inproceedings{anonymous2027structrecon,
   title     = {StructRecon: Robust Prior-Guided Neural Mapping under
                Trajectory-Constrained Degraded Geometry},
   author    = {Anonymous},
@@ -205,6 +206,6 @@
   year      = {2027}
 }</div></div></section>
   </main>
-  <footer><div class="container">Anonymous project page for review. Code and data will be released upon publication.</div></footer>
+  <footer><div class="container">Anonymous project page for AAAI 2027 review.</div></footer>
 </body>
 </html>
